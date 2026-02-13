@@ -11,7 +11,7 @@ use tokio::signal;
 
 #[derive(Debug, Parser)]
 struct Opt {
-    #[clap(short, long, default_value = "eth0")]
+    #[clap(short, long, default_value = "enp3s0")]
     iface: String,
 }
 
@@ -27,7 +27,7 @@ async fn main() -> Result<(), anyhow::Error> {
     // reach for `Ebpf::load_file` instead.
     let mut bpf = aya::Ebpf::load(aya::include_bytes_aligned!(concat!(
         env!("OUT_DIR"),
-        "/xdp-drop"
+        "/xdp-firewall"
     )))?;
     match EbpfLogger::init(&mut bpf) {
         Err(e) => {
@@ -35,10 +35,8 @@ async fn main() -> Result<(), anyhow::Error> {
             warn!("failed to initialize eBPF logger: {e}");
         }
         Ok(logger) => {
-            let mut logger = tokio::io::unix::AsyncFd::with_interest(
-                logger,
-                tokio::io::Interest::READABLE,
-            )?;
+            let mut logger =
+                tokio::io::unix::AsyncFd::with_interest(logger, tokio::io::Interest::READABLE)?;
             tokio::task::spawn(async move {
                 loop {
                     let mut guard = logger.readable_mut().await.unwrap();
@@ -48,15 +46,13 @@ async fn main() -> Result<(), anyhow::Error> {
             });
         }
     }
-    let program: &mut Xdp =
-        bpf.program_mut("xdp_firewall").unwrap().try_into()?;
+    let program: &mut Xdp = bpf.program_mut("xdp_firewall").unwrap().try_into()?;
     program.load()?;
     program.attach(&opt.iface, XdpFlags::default())
         .context("failed to attach the XDP program with default flags - try changing XdpFlags::default() to XdpFlags::SKB_MODE")?;
 
     // (1)
-    let mut blocklist: HashMap<_, u32, u32> =
-        HashMap::try_from(bpf.map_mut("BLOCKLIST").unwrap())?;
+    let mut blocklist: HashMap<_, u32, u32> = HashMap::try_from(bpf.map_mut("BLOCKLIST").unwrap())?;
 
     // (2)
     let block_addr: u32 = Ipv4Addr::new(1, 1, 1, 1).into();
