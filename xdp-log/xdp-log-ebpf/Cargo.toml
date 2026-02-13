@@ -1,0 +1,17 @@
+[package]
+name = "xdp-log-ebpf"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+xdp-log-common = { path = "../xdp-log-common" }
+
+aya-ebpf = { workspace = true }
+aya-log-ebpf = { workspace = true }
+
+[build-dependencies]
+which = { workspace = true }
+
+[[bin]]
+name = "xdp-log"
+path = "src/main.rs"
