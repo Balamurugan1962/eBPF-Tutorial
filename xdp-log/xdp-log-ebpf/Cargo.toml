@@ -1,16 +1,17 @@
+
 [package]
 name = "xdp-log-ebpf"
 version = "0.1.0"
 edition.workspace = true
 
 [dependencies]
+aya-ebpf = { git = "https://github.com/aya-rs/aya" }
+aya-log-ebpf = { git = "https://github.com/aya-rs/aya" }
 xdp-log-common = { path = "../xdp-log-common" }
-
-aya-ebpf = { workspace = true }
-aya-log-ebpf = { workspace = true }
+network-types = "0.1.0"
 
 [build-dependencies]
-which = { workspace = true }
+which = { version = "8.0.0", default-features = false, features = ["real-sys"] }
 
 [[bin]]
 name = "xdp-log"
