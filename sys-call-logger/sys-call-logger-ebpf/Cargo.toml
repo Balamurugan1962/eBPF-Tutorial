@@ -1,0 +1,17 @@
+[package]
+name = "sys-call-logger-ebpf"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+sys-call-logger-common = { path = "../sys-call-logger-common" }
+
+aya-ebpf = { workspace = true }
+aya-log-ebpf = { workspace = true }
+
+[build-dependencies]
+which = { workspace = true }
+
+[[bin]]
+name = "sys-call-logger"
+path = "src/main.rs"
