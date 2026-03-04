@@ -1,19 +1,18 @@
+
 [package]
 name = "dns-allowlist-ebpf"
 version = "0.1.0"
 edition.workspace = true
-license.workspace = true
-publish = false
+
+[dependencies]
+aya-ebpf = { git = "https://github.com/aya-rs/aya" }
+aya-log-ebpf = { git = "https://github.com/aya-rs/aya" }
+dns-allowlist-common = { path = "../dns-allowlist-common" }
+network-types = "0.1.0"
+
+[build-dependencies]
+which = { version = "8.0.0", default-features = false, features = ["real-sys"] }
 
 [[bin]]
 name = "dns-allowlist-ebpf"
 path = "src/main.rs"
-
-[dependencies]
-aya-ebpf = { workspace = true }
-aya-log-ebpf = { workspace = true }
-network-types = { version = "0.0.7", default-features = false }
-dns-allowlist-common = { path = "../dns-allowlist-common" }
-
-[build-dependencies]
-aya-build = { workspace = true }

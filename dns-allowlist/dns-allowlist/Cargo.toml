@@ -2,24 +2,32 @@
 name = "dns-allowlist"
 version = "0.1.0"
 edition.workspace = true
+
 license.workspace = true
-publish = false
+
+[dependencies]
+dns-allowlist-common = { path = "../dns-allowlist-common", features = ["user"] }
+
+anyhow = { workspace = true, default-features = true }
+aya = { workspace = true }
+aya-log = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+tokio = { workspace = true, features = [
+    "macros",
+    "rt",
+    "rt-multi-thread",
+    "net",
+    "signal",
+] }
+clap = { workspace = true, features = ["derive"] }
+
+[build-dependencies]
+anyhow = { workspace = true }
+aya-build = { workspace = true }
+cargo_metadata = { workspace = true }
+dns-allowlist-ebpf = { path = "../dns-allowlist-ebpf" }
 
 [[bin]]
 name = "dns-allowlist"
 path = "src/main.rs"
-
-[dependencies]
-aya = { workspace = true, features = ["async_tokio"] }
-aya-log = { workspace = true }
-dns-allowlist-common = { path = "../dns-allowlist-common" }
-anyhow = { workspace = true, features = ["std"] }
-clap = { workspace = true, features = ["derive"] }
-env_logger = { workspace = true, features = ["auto-color"] }
-log = { workspace = true, features = ["std"] }
-tokio = { workspace = true }
-
-[build-dependencies]
-aya-build = { workspace = true }
-cargo_metadata = { workspace = true }
-anyhow = { workspace = true, features = ["std"] }
