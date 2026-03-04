@@ -1,0 +1,25 @@
+[package]
+name = "dns-allowlist"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[[bin]]
+name = "dns-allowlist"
+path = "src/main.rs"
+
+[dependencies]
+aya = { workspace = true, features = ["async_tokio"] }
+aya-log = { workspace = true }
+dns-allowlist-common = { path = "../dns-allowlist-common" }
+anyhow = { workspace = true, features = ["std"] }
+clap = { workspace = true, features = ["derive"] }
+env_logger = { workspace = true, features = ["auto-color"] }
+log = { workspace = true, features = ["std"] }
+tokio = { workspace = true }
+
+[build-dependencies]
+aya-build = { workspace = true }
+cargo_metadata = { workspace = true }
+anyhow = { workspace = true, features = ["std"] }

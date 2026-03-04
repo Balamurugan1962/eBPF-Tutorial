@@ -1,0 +1,9 @@
+[package]
+name = "dns-allowlist-common"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false
+
+# No external dependencies — this crate contains only plain data types
+# that must compile in both std (userspace) and no_std (eBPF) environments.
